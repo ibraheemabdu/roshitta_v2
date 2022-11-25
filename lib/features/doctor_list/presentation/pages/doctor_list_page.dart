@@ -6,6 +6,8 @@ import 'package:rosheta/features/doctor_details/presentation/pages/doctor_detail
 import '../../../../core/app_consts.dart';
 import '../../../../core/my_widgets.dart';
 import '../../../../core/partial_painter.dart';
+import '../../data/datasources/api.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class DoctorList extends StatefulWidget {
   const DoctorList({Key? key}) : super(key: key);
@@ -14,6 +16,34 @@ class DoctorList extends StatefulWidget {
 }
 
 class _DoctorListState extends State<DoctorList> {
+
+  final PagingController<int, SearchProduct> _pagingController =
+  PagingController(firstPageKey: 0);
+
+  // Future<void> _fetchPage(int pageKey , lang) async {
+  //   try {
+  //     final newItems = await getDoctoData(
+  //         pageKey,
+  //         _searchTerm,arrBrand,arrBrandCar
+  //         ,arrCarType,arrTypeSelctions,lang
+  //     );
+  //
+  //     final isLastPage = newItems.length < 10;
+  //     if (isLastPage) {
+  //       _pagingController.appendLastPage(newItems);
+  //     }
+  //     else {
+  //       final nextPageKey = pageKey + 1;
+  //       _pagingController.appendPage(newItems, nextPageKey);
+  //     }
+  //   }
+  //   catch (error) {
+  //     _pagingController.error = error;
+  //   }
+  // }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

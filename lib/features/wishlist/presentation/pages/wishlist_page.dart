@@ -44,9 +44,9 @@ class WishListPage extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             children: [
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
+              // SingleDoctorsWidget(),
+              // SingleDoctorsWidget(),
+              // SingleDoctorsWidget(),
             ],
           ),
         ],

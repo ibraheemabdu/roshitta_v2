@@ -7,7 +7,10 @@ import '../../../category_list/presentation/pages/category_list_page.dart';
 import '../../../pharmacy_details/presentation/pages/pharmacy_details_page.dart';
 
 class CategoryWidget extends StatelessWidget {
-  const CategoryWidget({Key? key}) : super(key: key);
+  var bulk ;
+
+
+  CategoryWidget(this.bulk);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class CategoryWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Category',
+                bulk[0]['title'],
                 style: TextStyle(color: Colors.black, fontSize: 20),
               ),
               InkWell(
@@ -41,17 +44,14 @@ class CategoryWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 15),
           child: Container(
             height: 130,
-            child: ListView(
+            child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              children: [
-                SingleCategoryWidget(),
-                SingleCategoryWidget(),
-                SingleCategoryWidget(),
-                SingleCategoryWidget(),
-                SingleCategoryWidget(),
-                SingleCategoryWidget(),
-              ],
+              itemCount: bulk[0]['data'].length,
+              itemBuilder: (context, index) {
+                return SingleCategoryWidget(bulk[0]['data'][index][0].toString(),
+                    bulk[0]['data'][index][1].toString());
+              },
             ),
           ),
         ),

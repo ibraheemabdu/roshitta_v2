@@ -52,7 +52,6 @@ class AccordionWidget extends StatelessWidget {
               content: Text(_loremIpsum, style: _contentStyle),
               contentHorizontalPadding: 20,
               contentBorderWidth: 1,
-
               rightIcon: Icon(Icons.keyboard_arrow_down),
             ),
             AccordionSection(

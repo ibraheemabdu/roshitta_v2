@@ -12,7 +12,9 @@ import '../../../doctor_list/presentation/pages/doctor_list_page.dart';
 
 
 class DoctorsWidget extends StatefulWidget {
-  const DoctorsWidget({Key? key}) : super(key: key);
+  var bulk ;
+
+  DoctorsWidget(this.bulk);
 
   @override
   State<DoctorsWidget> createState() => _DoctorsWidgetState();
@@ -23,7 +25,7 @@ class _DoctorsWidgetState extends State<DoctorsWidget> with TickerProviderStateM
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2 , vsync: this);
     _tabController.addListener(_handleTabSelection);
     super.initState();
   }
@@ -51,7 +53,7 @@ class _DoctorsWidgetState extends State<DoctorsWidget> with TickerProviderStateM
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Doctors',
+                widget.bulk[0]['title'],
                 style: TextStyle(color: Colors.black, fontSize: 20),
               ),
               InkWell(
@@ -98,42 +100,26 @@ class _DoctorsWidgetState extends State<DoctorsWidget> with TickerProviderStateM
                   child: Text('Top Rated',
                       style: TextStyle(color: Colors.white)),
                 ),
-                Tab(
-                  child: Text('Best Reviews ',
-                      style: TextStyle(color: Colors.white)),
-                ),
               ],
             ),
           ),
         ),
         [
-          ListView(
+          ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            children: [
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-            ],
+            itemCount: widget.bulk[0]['data']['all_doctors'].length,
+            itemBuilder: (context, index) {
+              return SingleDoctorsWidget(widget.bulk[0]['data']['all_doctors'][index]);
+            },
           ),
-          ListView(
+          ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            children: [
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-
-            ],
-          ),
-          ListView(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-              SingleDoctorsWidget(),
-            ],
+            itemCount: widget.bulk[0]['data']['rated_doctors'].length,
+            itemBuilder: (context, index) {
+              return SingleDoctorsWidget(widget.bulk[0]['data']['rated_doctors'][index]);
+            },
           ),
         ][_tabController.index],
       ],

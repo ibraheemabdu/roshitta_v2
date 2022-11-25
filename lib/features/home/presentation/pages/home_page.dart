@@ -7,6 +7,7 @@ import 'package:rosheta/features/home/presentation/widgets/search-filter_widget.
 import 'package:rosheta/features/notification/presentation/pages/notification_page.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import '../../../../core/side_drawer.dart';
+import '../../data/datasources/api.dart';
 import '../widgets/category_widget.dart';
 
 
@@ -17,8 +18,6 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-
-
 class _HomePageState extends State<HomePage>  {
 
   final _advancedDrawerController = AdvancedDrawerController();
@@ -27,6 +26,14 @@ class _HomePageState extends State<HomePage>  {
 
   @override
   Widget build(BuildContext context) {
+
+    var future;
+    _getData(lang) async{
+      return await getHomeData(lang);
+    }
+
+    future = _getData('en');
+
     return AdvancedDrawer(
 
       drawer: SideDrawer(_advancedDrawerController),
@@ -42,71 +49,135 @@ class _HomePageState extends State<HomePage>  {
       child: Scaffold(
         drawer:SideDrawer(_advancedDrawerController),
         backgroundColor: Colors.white,
-        body: ListView(
-          children: [
+        body: FutureBuilder(
+            future: future,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+              {
+                return Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
+              else if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Center();
+                }
+                else if (snapshot.hasData) {
+                  var data = snapshot.data;
+                  return ListView.builder(
+                    itemCount: data['data'].length,
+                    itemBuilder: (context, index) {
 
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    child: FaIcon(
-                      FontAwesomeIcons.barsStaggered,
-                    ),
-                    onTap: () {
-                      _advancedDrawerController.showDrawer();
+                      if(data['data'][index]['display_type'] == 1)
+                        {
+                          return Column(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 16
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        child: FaIcon(
+                                          FontAwesomeIcons.barsStaggered,
+                                        ),
+                                        onTap: () {
+                                          _advancedDrawerController.showDrawer();
+                                        },
+                                      ),
+                                      InkWell(
+                                        onTap:(){
+                                          Get.to(NotificationPage());
+                                        },
+                                        child: FaIcon(
+                                          FontAwesomeIcons.bell,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              SearchFilterWidget(),
+                              SizedBox(height: 5,),
+                              CategoryWidget(data['data'][index]['bulk']),
+                            ],
+                          );
+                        }
+                      else if(data['data'][index]['display_type'] == 2)
+                      {
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 25,
+                            ),
+                            DoctorsWidget(data['data'][index]['bulk']),
+                          ],
+                        );
+                      }
+                      else  {
+                        return Container();
+                      }
                     },
-                  ),
-                  InkWell(
-                    onTap:(){
-                      Get.to(NotificationPage());
-                    },
-                    child: FaIcon(
-                      FontAwesomeIcons.bell,
+
+                    // children: [
+                    //   Padding(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         vertical: 8,
+                    //         horizontal: 16
+                    //     ),
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         InkWell(
+                    //           child: FaIcon(
+                    //             FontAwesomeIcons.barsStaggered,
+                    //           ),
+                    //           onTap: () {
+                    //             _advancedDrawerController.showDrawer();
+                    //           },
+                    //         ),
+                    //         InkWell(
+                    //           onTap:(){
+                    //             Get.to(NotificationPage());
+                    //           },
+                    //           child: FaIcon(
+                    //             FontAwesomeIcons.bell,
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   SearchFilterWidget(),
+                    //   SizedBox(
+                    //     height: 5,
+                    //   ),
+                    //   CategoryWidget(),
+                    //   SizedBox(
+                    //     height: 25,
+                    //   ),
+                    //   DoctorsWidget(),
+                    //   SizedBox(
+                    //     height: 20,
+                    //   )
+                    // ],
+                  );
+                }
+                else {
+                  return Center(
+                    child: Container(
                     ),
-                  )
-                ],
-              ),
+                  );
+                }
+              } else
+              {
+                return Center(
+                  child: Container(),
+                );
+              }
+            }
             ),
-
-            SearchFilterWidget(),
-
-
-
-            SizedBox(
-              height: 5,
-            ),
-
-
-            CategoryWidget(),
-
-
-
-
-
-
-
-
-
-            SizedBox(
-              height: 25,
-            ),
-
-
-
-
-            DoctorsWidget(),
-
-
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
       ),
     );
   }

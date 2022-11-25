@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../core/app_consts.dart';
 import '../../../../core/my_widgets.dart';
@@ -9,7 +10,10 @@ import '../../../book_visit/presentation/pages/book_visit_page.dart';
 import '../../../doctor_details/presentation/pages/doctor_details_page.dart';
 
 class SingleDoctorsWidget extends StatelessWidget {
-  const SingleDoctorsWidget({Key? key}) : super(key: key);
+  var data ;
+
+
+  SingleDoctorsWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +40,11 @@ class SingleDoctorsWidget extends StatelessWidget {
                     width: 100,
                     child: CustomPaint(
                       child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        //child: Image.network(''),
+                        padding: const EdgeInsets.all(5.0),
+                        child: Image.network(
+                            data['image'].toString(),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                       painter: PartialPainter(
                           radius: 10,
@@ -54,42 +61,56 @@ class SingleDoctorsWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Dr.Hilal Abughoush',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500
+              Container(
+                width: Get.width - 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: Get.width - 220,
+                      child: Text(data['username'],
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text('IVF and Infertility'),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.locationDot,
-                        color: Colors.grey.shade700,
-                        size: 15,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text('Jordan/Amman',
-                          style: TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  buildStarsLarg(3)
-                ],
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(data['main_specialty_name'].toString()),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        FaIcon(
+                          FontAwesomeIcons.locationDot,
+                          color: Colors.grey.shade700,
+                          size: 15,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+
+                          width: Get.width - 220,
+                          child: Text(data['address'].toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 12)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    buildStarsLarg(data['reviews'])
+                  ],
+                ),
               ),
               Column(
                 children: [
