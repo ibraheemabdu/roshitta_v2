@@ -24,7 +24,7 @@ Future customSnackBarWidget(Map response,{code = '',})  async {
         SizedBox(
           width: Get.width * .60,
           child: Text(
-            response['messages'].toString() ,
+            response['msg'].toString() ,
             style: Get.textTheme.headline6?.copyWith(color: Colors.white),
           ),
         ));
@@ -36,8 +36,8 @@ Future customSnackBarWidget(Map response,{code = '',})  async {
       isSuccess = false;
     }
   Get.snackbar(
-    response['messages'].toString(),
-    response['messages'].toString(),
+    response['msg'].toString(),
+    response['msg'].toString(),
     snackPosition: SnackPosition.TOP,
     titleText: SizedBox(),
     margin: EdgeInsets.only(top: 10,left: 10,right: 10),

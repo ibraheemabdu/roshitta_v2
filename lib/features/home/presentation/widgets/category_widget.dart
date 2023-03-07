@@ -49,8 +49,7 @@ class CategoryWidget extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: bulk[0]['data'].length,
               itemBuilder: (context, index) {
-                return SingleCategoryWidget(bulk[0]['data'][index][0].toString(),
-                    bulk[0]['data'][index][1].toString());
+                return SingleCategoryWidget(bulk[0]['data'][index]);
               },
             ),
           ),

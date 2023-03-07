@@ -6,7 +6,10 @@ import '../../../../core/app_consts.dart';
 import '../../../start/presentation/pages/start_page.dart';
 
 class PastWidget extends StatelessWidget {
-  const PastWidget({Key? key}) : super(key: key);
+  var data ;
+
+
+  PastWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +21,14 @@ class PastWidget extends StatelessWidget {
         children: [
           Text('Past',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
           SizedBox(height: 15,),
-          ListView(
+          ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            children: [
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-              PastDetailsWidget(),
-
-            ],
+            itemCount: data['data']['past'].length,
+            itemBuilder: (context, index) {
+              return PastDetailsWidget(data['data']['past'][index]);
+            },
+            // PastDetailsWidget(),
           ),
         ],
       ),

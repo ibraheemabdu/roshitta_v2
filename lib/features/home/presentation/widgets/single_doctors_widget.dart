@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../../../core/app_consts.dart';
 import '../../../../core/my_widgets.dart';
 import '../../../../core/partial_painter.dart';
@@ -40,9 +39,9 @@ class SingleDoctorsWidget extends StatelessWidget {
                     width: 100,
                     child: CustomPaint(
                       child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Image.network(
-                            data['image'].toString(),
+                        padding: const EdgeInsets.all(3.0),
+                        child: CachedNetworkImage(
+                          imageUrl:  data['image'].toString(),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -117,7 +116,7 @@ class SingleDoctorsWidget extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        Get.to(BookVisitPage());
+                        //Get.to(BookVisitPage());
                       },
                       child: Container(
                         width: 60,
@@ -138,7 +137,7 @@ class SingleDoctorsWidget extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        Get.to(DoctorDetailsPage());
+                        Get.to(DoctorDetailsPage(data));
                       },
                       child: Container(
                         width: 60,

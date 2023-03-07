@@ -1,4 +1,4 @@
-package com.example.rosheta
+package com.roshiitajo.roshiita
 
 import io.flutter.embedding.android.FlutterActivity
 

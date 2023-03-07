@@ -10,42 +10,30 @@ import '../../../../core/side_drawer.dart';
 import '../../data/datasources/api.dart';
 import '../widgets/category_widget.dart';
 
-
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>  {
-
   final _advancedDrawerController = AdvancedDrawerController();
-
-
+  var future;
+  _getData(lang) async{
+    return await getHomeData(lang);
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    var future;
-    _getData(lang) async{
-      return await getHomeData(lang);
-    }
-
     future = _getData('en');
-
     return AdvancedDrawer(
-
       drawer: SideDrawer(_advancedDrawerController),
       backdropColor: Colors.white,
       controller: _advancedDrawerController,
-
-      //rtlOpening: translator.isDirectionRTL(context) ? true : false,
       disabledGestures: true,
       childDecoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-
       child: Scaffold(
         drawer:SideDrawer(_advancedDrawerController),
         backgroundColor: Colors.white,
@@ -67,6 +55,7 @@ class _HomePageState extends State<HomePage>  {
                   return ListView.builder(
                     itemCount: data['data'].length,
                     itemBuilder: (context, index) {
+
 
                       if(data['data'][index]['display_type'] == 1)
                         {
@@ -99,7 +88,7 @@ class _HomePageState extends State<HomePage>  {
                                     ],
                                   ),
                                 ),
-                              SearchFilterWidget(),
+                              SearchFilterWidget(data),
                               SizedBox(height: 5,),
                               CategoryWidget(data['data'][index]['bulk']),
                             ],
@@ -116,61 +105,19 @@ class _HomePageState extends State<HomePage>  {
                           ],
                         );
                       }
-                      else  {
+                      else {
                         return Container();
                       }
                     },
-
-                    // children: [
-                    //   Padding(
-                    //     padding: const EdgeInsets.symmetric(
-                    //         vertical: 8,
-                    //         horizontal: 16
-                    //     ),
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         InkWell(
-                    //           child: FaIcon(
-                    //             FontAwesomeIcons.barsStaggered,
-                    //           ),
-                    //           onTap: () {
-                    //             _advancedDrawerController.showDrawer();
-                    //           },
-                    //         ),
-                    //         InkWell(
-                    //           onTap:(){
-                    //             Get.to(NotificationPage());
-                    //           },
-                    //           child: FaIcon(
-                    //             FontAwesomeIcons.bell,
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   SearchFilterWidget(),
-                    //   SizedBox(
-                    //     height: 5,
-                    //   ),
-                    //   CategoryWidget(),
-                    //   SizedBox(
-                    //     height: 25,
-                    //   ),
-                    //   DoctorsWidget(),
-                    //   SizedBox(
-                    //     height: 20,
-                    //   )
-                    // ],
                   );
                 }
                 else {
                   return Center(
-                    child: Container(
-                    ),
+                    child: Container(),
                   );
                 }
-              } else
+              }
+              else
               {
                 return Center(
                   child: Container(),
@@ -182,5 +129,6 @@ class _HomePageState extends State<HomePage>  {
     );
   }
 }
+
 
 

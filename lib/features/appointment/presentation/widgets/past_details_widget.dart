@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PastDetailsWidget extends StatelessWidget {
-  const PastDetailsWidget({Key? key}) : super(key: key);
+  var data ;
+  PastDetailsWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,6 @@ class PastDetailsWidget extends StatelessWidget {
       children: [
         Container(
           width: Get.width,
-
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10))
@@ -38,7 +38,12 @@ class PastDetailsWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Dr.Ahmad',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                            Container(
+
+                                child: Text(data['doctor_name'],
+                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                            width: Get.width / 2.5,
+                            ),
                             SizedBox(height: 5),
                             Container(
                               decoration: BoxDecoration(
@@ -47,7 +52,7 @@ class PastDetailsWidget extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Skin Specialist',style: TextStyle(
+                                child: Text(data['doctor_specialty'],style: TextStyle(
                                     fontSize: 11
                                 )),
                               ),
@@ -61,10 +66,12 @@ class PastDetailsWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('tomorrow',style: TextStyle(
+                        Text(data['app_date'],style: TextStyle(
                             fontSize: 12)),
                         SizedBox(height: 5),
-                        Text('03:30 pm . 21 Hours',style: TextStyle(
+                        Text(data['time'],style: TextStyle(
+                            fontSize: 12)),
+                        Text(data['diff_date'],style: TextStyle(
                             fontSize: 12)),
                       ],
                     )

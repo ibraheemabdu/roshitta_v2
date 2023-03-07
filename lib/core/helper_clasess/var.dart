@@ -25,7 +25,7 @@ class PublicVariables {
 }
 
 class AppDataModel extends GetxController{
-  // var  cartLength = 0.obs ;
+   List  passengers = [];
   // List<CartItem> cartItem = [];
   // int cartToltalQuantity = 0 ;
   // double cartToltalPrice = 0.0 ;

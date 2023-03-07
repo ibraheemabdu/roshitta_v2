@@ -10,6 +10,11 @@ import '../../../home/presentation/pages/home_page.dart';
 import 'package:get/get.dart';
 
 class PharmacyDetailsPage extends StatefulWidget {
+
+  var data ;
+
+  PharmacyDetailsPage(this.data);
+
   @override
   _PharmacyDetailsPagePageState createState() =>
       _PharmacyDetailsPagePageState();
@@ -19,38 +24,16 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
   final _headerStyle = const TextStyle(
       color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600);
 
-  final _contentStyle = const TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
-  final _loremIpsum =
-      '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
-  List<Year> _list = Year.getYear();
-  late List<DropdownMenuItem<Year>> _dropdownMenuItems;
-  late Year _selectedCompany;
+
   @override
   void initState() {
-    _dropdownMenuItems = buildDropdownMenuItems(_list);
-    _selectedCompany = _dropdownMenuItems[0].value!;
+
     super.initState();
   }
 
-  List<DropdownMenuItem<Year>> buildDropdownMenuItems(List companies) {
-    List<DropdownMenuItem<Year>> items = [];
-    for (Year company in companies) {
-      items.add(
-        DropdownMenuItem(
-          value: company,
-          child: Text(company.name),
-        ),
-      );
-    }
-    return items;
-  }
 
-  onChangeDropdownItem(Year selectedCompany) {
-    setState(() {
-      _selectedCompany = selectedCompany;
-    });
-  }
+
+
 
   CarouselController buttonCarouselController = CarouselController();
 
@@ -102,6 +85,10 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
                     child: CustomPaint(
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
+                        child: Image.network(
+                          widget.data['image'].toString(),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                       painter: PartialPainter(
                           radius: 10,
@@ -127,24 +114,26 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Dr.Hilal Abughoush', style: TextStyle(fontSize: 20)),
+                    Container(
+                        width: Get.width - 170,
+                        child: Text(widget.data['username'].toString(), style: TextStyle(fontSize: 20))),
                     SizedBox(
                       height: 5,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('IVF and Infertility'),
+                        Text(widget.data['phone'].toString()),
                         SizedBox(
                           height: 5,
                         ),
-                        Text('Fees: 25,00', style: TextStyle(fontSize: 12)),
+                        Text(widget.data['email'].toString(), style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    buildStarsLarg(3)
+                    buildStarsLarg(widget.data['reviews'])
                   ],
                 ),
               ),
@@ -168,14 +157,8 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
                 SizedBox(
                   width: 5,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Alshmysani , jaber ben hayyn',
-                        style: TextStyle(fontSize: 12)),
-                    Text('St.bud #65', style: TextStyle(fontSize: 12)),
-                  ],
-                ),
+                Text(widget.data['address'].toString(),
+                    style: TextStyle(fontSize: 12)),
               ],
             ),
           ),
@@ -194,18 +177,7 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text('''Lorem ipsum is typically a corrupted version
-             of 'De finibus bonorum et malorum',
-              a 1st century BC text by the Roman statesman 
-              and philosopher Cicero, with words altered, 
-              added, and removed to make it nonsensical and 
-              improper Latin. Lorem ipsum is typically 
-              a corrupted version
-              of 'De finibus bonorum et malorum',
-              a 1st century BC text by the Roman statesman 
-              and philosopher Cicero, with words altered, 
-              added, and removed to make it nonsensical and 
-              improper Latin.''',
+            child: Text(widget.data['institution_description'].toString(),
                 style: TextStyle(fontSize: 14, color: AppColors.gray)),
           ),
           SizedBox(
@@ -221,14 +193,11 @@ class _PharmacyDetailsPagePageState extends State<PharmacyDetailsPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: CarouselSlider(
-              items: [
-                'assets/images/splash_background.png',
-                'assets/images/logo.png',
-                'assets/images/engin.png']
+              items: widget.data['images']
                   .map<Widget>(
                     (item) => Container(
                       width: Get.width - 110,
-                      child: Image.asset(item),
+                      child: Image.network(item['image'].toString(),fit: BoxFit.fill,),
                     ),
                   ).toList(),
               carouselController: buttonCarouselController,

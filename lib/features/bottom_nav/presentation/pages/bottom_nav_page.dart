@@ -61,6 +61,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
         backgroundColor: Colors.white,
         activeColor: AppColors.light_green,
         color: Colors.grey,
+
         onTap: _onItemTapped, items: [
         TabItem(icon: Icons.home, title: 'Home'),
         TabItem(icon: Icons.settings, title: 'Settings'),

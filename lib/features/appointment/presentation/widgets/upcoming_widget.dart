@@ -6,7 +6,10 @@ import '../../../../core/app_consts.dart';
 import '../../../start/presentation/pages/start_page.dart';
 
 class UpcomingWidget extends StatelessWidget {
-  const UpcomingWidget({Key? key}) : super(key: key);
+  var data ;
+
+
+  UpcomingWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +21,13 @@ class UpcomingWidget extends StatelessWidget {
         children: [
           Text('Upcoming',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
           SizedBox(height: 15,),
-          ListView(
+          ListView.builder(
+            itemCount: data['data']['comming'].length,
+            itemBuilder: (context, index) {
+              return UpcomingDetailsWidget(data['data']['comming'][index]);
+            },
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            children: [
-              UpcomingDetailsWidget(),
-              UpcomingDetailsWidget(),
-            ],
           ),
         ],
       ),

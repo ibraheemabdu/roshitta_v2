@@ -159,12 +159,13 @@ class NetworkHelper {
 
     final _body = _getBody(body: body!);
 
-
+    print('_url_url_url_url_url_url_url_url_url_url_url');
+    print(url);
     Uri _url = Uri.https(baseUrl, url);
-
 
     print('_url_url_url_url_url_url_url_url_url_url_url');
     print(_url);
+
 
 
 
@@ -177,7 +178,7 @@ class NetworkHelper {
 
           headers: _headers,
 
-          body: jsonEncode(_body)).timeout( Duration(seconds: 15));
+          body: jsonEncode(_body)).timeout( Duration(seconds: 30));
 
       final data = _handleResponse(response: response,showSnackBar: showSnackBar,deCoded: deCoded);
 

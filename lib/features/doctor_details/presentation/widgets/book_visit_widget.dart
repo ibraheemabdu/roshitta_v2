@@ -8,25 +8,58 @@ import '../../../../core/my_widgets.dart';
 import '../../../book_visit/presentation/pages/book_visit_page.dart';
 
 class BookVistWidget extends StatefulWidget {
-  const BookVistWidget({Key? key}) : super(key: key);
+  var data ;
+  var doctor_name ;
+  var user_id ;
+
+
+  BookVistWidget(this.data,this.doctor_name , this.user_id);
 
   @override
   State<BookVistWidget> createState() => _BookVistWidgetState();
 }
 
 class _BookVistWidgetState extends State<BookVistWidget> {
-  List<Year> _list = Year.getYear();
-  List<Day> _list2 = Day.getDay();
+  List<Year> _list = [];
+  List<Day> _list2 = [];
   late List<DropdownMenuItem<Year>> _dropdownMenuItems;
-  late Year _selectedCompany;
-
+  late Year _selectedYear;
+  String monthSelected = '';
+  int dayIndex = 0 ;
+  int timeIndex = 0 ;
 
   @override
   void initState() {
+    for(int i = 0 ; i < widget.data['months'].length ; i ++)
+      {
+        _list.add(
+          Year(widget.data['months'][i].toString())
+        );
+      }
+
+        for(int i = 0 ; i < widget.data['data'].length ; i ++)
+        {
+          if(widget.data['data'][i]['month'].toString() == widget.data['months'][0])
+            {
+              _list2.add(
+                Day(
+                    widget.data['data'][i]['date'].toString(),
+                    widget.data['data'][i]['day'].toString(),
+                    widget.data['data'][i]['month'].toString(),
+                    widget.data['data'][i]['times'],
+                    i == 0 ? true : false
+                )
+              );
+            }
+        }
+
+
     _dropdownMenuItems = buildDropdownMenuItems(_list);
-    _selectedCompany = _dropdownMenuItems[0].value!;
+    _selectedYear = _dropdownMenuItems[0].value!;
+    monthSelected = widget.data['months'][0] ;
     super.initState();
   }
+
   List<DropdownMenuItem<Year>> buildDropdownMenuItems(List companies) {
     List<DropdownMenuItem<Year>> items = [];
     for (Year company in companies) {
@@ -39,14 +72,32 @@ class _BookVistWidgetState extends State<BookVistWidget> {
     }
     return items;
   }
-  onChangeDropdownItem(Year selectedCompany) {
+
+  onChangeDropdownItem(Year selectedYear) {
     setState(() {
-      _selectedCompany = selectedCompany;
+      _selectedYear = selectedYear;
+
+      monthSelected = selectedYear.name ;
+      dayIndex = 0;
+      timeIndex = 0 ;
+      _list2 = [] ;
+      for(int i = 0 ; i < widget.data['data'].length ; i ++)
+      {
+        if(widget.data['data'][i]['month'].toString() == selectedYear.name)
+        {
+          _list2.add(
+              Day(
+                  widget.data['data'][i]['date'].toString(),
+                  widget.data['data'][i]['day'].toString(),
+                  widget.data['data'][i]['month'].toString(),
+                  widget.data['data'][i]['times'],
+                  _list2.length == 0 ? true : false
+              )
+          );
+        }
+      }
     });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +117,7 @@ class _BookVistWidgetState extends State<BookVistWidget> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<Year>(
-            value: _selectedCompany,
+            value: _selectedYear,
             items: _dropdownMenuItems,
             underline: Container(),
             icon: Icon(Icons.keyboard_arrow_down),
@@ -88,7 +139,9 @@ class _BookVistWidgetState extends State<BookVistWidget> {
                 return   InkWell(
                     onTap: (){
                       setState(() {
+                        timeIndex = 0 ;
                         _list2[index].status  = !_list2[index].status ;
+                        dayIndex = index ;
 
                         for(int i = 0 ; i < _list2.length ; i++)
                           {
@@ -100,9 +153,9 @@ class _BookVistWidgetState extends State<BookVistWidget> {
                       });
                     },
                     child:  _list2[index].status  ?  ActiveBookByDay(
-                        _list2[index].day_number , _list2[index].day):
+                        _list2[index].date , _list2[index].day):
                     NonActiveBookByDay(
-                        _list2[index].day_number , _list2[index].day),
+                        _list2[index].date , _list2[index].day),
                   );
                 },
             ),
@@ -124,147 +177,112 @@ class _BookVistWidgetState extends State<BookVistWidget> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical:8,horizontal: 8),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                    ),
-                    height: 40,
-                    width: 100,
-                    child: Center(child: Text('10:00 AM')),
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: AppColors.light_green,
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            border: Border.all(
-                                color: AppColors.green
-                            )
-                        ),
-                        height: 40,
-                        width: 100,
-                        child: Center(child: Text('10:00 AM',style: TextStyle(
-                            color: AppColors.green,
-                            fontWeight: FontWeight.bold
-                        ),)),
-                      ),
-                      Positioned(
-                        child: Icon(Icons.check_circle,color: AppColors.green,size: 15),
-                        right: 0,
-                        top: 0,
+          child: GridView.builder(
+            gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: (Get.width / 100).round(),
+              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 10.0,
+              mainAxisExtent: 40
+            ),
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _list2[dayIndex].times.length,
+            itemBuilder: (context, index) {
+             return InkWell(
+               onTap: () {
+                 setState(() {
+                   timeIndex = index;
+                 });
+               },
+               child: timeIndex == index ?
 
-                      ),
-                    ],
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                    ),
-                    height: 40,
-                    width: 100,
-                    child: Center(child: Text('10:00 AM')),
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-              ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                    ),
-                    height: 40,
-                    width: 100,
-                    child: Center(child: Text('10:00 AM')),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                    ),
-                    height: 40,
-                    width: 100,
-                    child: Center(child: Text('10:00 AM')),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.all(Radius.circular(15))
-                    ),
-                    height: 40,
-                    width: 100,
-                    child: Center(child: Text('10:00 AM')),
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-              ),
-            ],
+               Stack(
+                 children: [
+                   Padding(
+                     padding: const EdgeInsets.all(1.0),
+                     child: Container(
+                       decoration: BoxDecoration(
+                           color: AppColors.light_green,
+                           border: Border.all(
+                               color: AppColors.green,
+                               width: 1
+                           ),
+                           borderRadius: BorderRadius.all(Radius.circular(15))
+                       ),
+                       height: 40,
+                       width: 100,
+                       child: Center(child:
+                       Text(_list2[dayIndex].times[index].toString())
+                       ),
+                     ),
+                   ),
+                   Positioned(
+                     child: Icon(Icons.check_circle,color: AppColors.green,size: 15),
+                     right: 0,
+                     top: 0,
+
+                   ),
+                 ],
+               ) :
+               Container(
+               decoration: BoxDecoration(
+                   color: Colors.grey.shade300,
+                   borderRadius: BorderRadius.all(Radius.circular(15))
+               ),
+               height: 40,
+               width: 100,
+               child: Center(child:
+               Text(_list2[dayIndex].times[index].toString())
+               ),
+             )
+             );
+            },
+
           ),
         ),
         SizedBox(
           height: 20,
         ),
-        Center(child: InkWell(
-            onTap: () {
-              Get.to(BookVisitPage());
-            },
-            child: buildButton('Book A Visit', false))),
+        Center(
+            child: InkWell(
+                onTap: () {
+                  Get.to(BookVisitPage(
+                    widget.doctor_name,
+                      _list2[dayIndex].date,
+                      monthSelected,
+                      _list2[dayIndex].times[timeIndex],
+                  widget.user_id));
+                },
+                child: buildButton('Book A Visit', false)
+            )
+        ),
       ],
     );
   }
 }
 
-
-
-
-
 class Day {
-  int id;
-  String day_number;
-  String day ;
+  String day;
+  String date ;
+  String month ;
   bool status ;
+  var times ;
 
-  Day(this.id, this.day_number , this.day, this.status);
+  Day( this.date , this.day, this.month , this.times , this.status);
 
-  static List<Day> getDay() {
-    return <Day>[
-      Day(1, '13','We',false),
-      Day(2, '14','Th',false),
-      Day(3, '15','Fr',false),
-      Day(4, '16','Sa',false),
-      Day(5, '17','Su',false),
-      Day(6, '18','Mo',false),
-      Day(7, '19','Tu',false),
-      Day(8, '20','Th',false),
-      Day(9, '21','Fr',false),
-      Day(10, '22','Sa',false),
-      Day(11, '23','Su',false),
-    ];
-  }
 }
 
+class Times {
+
+  String time;
+
+  Times( this.time );
+
+}
 
 class Year {
-  int id;
+
   String name;
 
-  Year(this.id, this.name);
-
-  static List<Year> getYear() {
-    return <Year>[
-      Year(1, 'August,2022'),
-      Year(2, 'September,2022'),
-      Year(3, 'October,2022'),
-      Year(4, 'November,2022'),
-    ];
-  }
+  Year(this.name);
 }

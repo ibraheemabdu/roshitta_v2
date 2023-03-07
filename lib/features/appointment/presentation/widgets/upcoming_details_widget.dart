@@ -5,7 +5,10 @@ import '../../../../core/app_consts.dart';
 import '../../../start/presentation/pages/start_page.dart';
 
 class UpcomingDetailsWidget extends StatelessWidget {
-  const UpcomingDetailsWidget({Key? key}) : super(key: key);
+  var data ;
+
+
+  UpcomingDetailsWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class UpcomingDetailsWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Dr.Ahmad',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                            Text(data['doctor_name'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
                             SizedBox(height: 5),
                             Container(
                               decoration: BoxDecoration(
@@ -51,7 +54,7 @@ class UpcomingDetailsWidget extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('Skin Specialist',style: TextStyle(
+                                child: Text(data['doctor_specialty'],style: TextStyle(
                                     fontSize: 11
                                 )),
                               ),
@@ -60,73 +63,72 @@ class UpcomingDetailsWidget extends StatelessWidget {
                         )
                       ],
                     ),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('tomorrow',style: TextStyle(
+                        Text(data['app_date'],style: TextStyle(
                             fontSize: 12)),
                         SizedBox(height: 5),
-                        Text('03:30 pm . 21 Hours',style: TextStyle(
+                        Text(data['time'],style: TextStyle(
+                            fontSize: 12)),
+                        Text( data['diff_date'],style: TextStyle(
                             fontSize: 12)),
                       ],
                     )
-
-
                   ],
                 ),
-                Divider(thickness: 1),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  AppColors.purple,
-                                  AppColors.green,
-                                ],
-                              )),
-                          alignment: Alignment.center,
-                          width: Get.width * 0.35,
-                          height: Get.height * 0.055,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Cancel',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                      ),
-                    ),
-                    UnicornOutlineButton(
-                      strokeWidth: 1,
-                      radius: 10,
-                      gradient: LinearGradient(
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
-                        colors: [
-                          AppColors.purple,
-                          AppColors.green,
-                        ],
-                      ),
-                      child: Text('Reschedule', style: TextStyle(fontSize: 16)),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
+               // Divider(thickness: 1),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     InkWell(
+                //       onTap: () {
+                //       },
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(10.0),
+                //               gradient: LinearGradient(
+                //                 begin: Alignment.topRight,
+                //                 end: Alignment.bottomLeft,
+                //                 colors: [
+                //                   AppColors.purple,
+                //                   AppColors.green,
+                //                 ],
+                //               )),
+                //           alignment: Alignment.center,
+                //           width: Get.width * 0.35,
+                //           height: Get.height * 0.055,
+                //           child: Align(
+                //             alignment: Alignment.center,
+                //             child: Text(
+                //               'Cancel',
+                //               style: TextStyle(
+                //                   fontSize: 20,
+                //                   color: Colors.white,
+                //                   fontWeight: FontWeight.w500),
+                //               textAlign: TextAlign.center,
+                //             ),
+                //           )
+                //       ),
+                //     ),
+                //     UnicornOutlineButton(
+                //       strokeWidth: 1,
+                //       radius: 10,
+                //       gradient: LinearGradient(
+                //         begin: Alignment.centerRight,
+                //         end: Alignment.centerLeft,
+                //         colors: [
+                //           AppColors.purple,
+                //           AppColors.green,
+                //         ],
+                //       ),
+                //       child: Text('Reschedule', style: TextStyle(fontSize: 16)),
+                //       onPressed: () {},
+                //     ),
+                //   ],
+                // ),
 
               ],
             ),

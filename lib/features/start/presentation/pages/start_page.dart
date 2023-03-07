@@ -9,6 +9,8 @@ import 'package:rosheta/features/forgot_password/presentation/pages/forgot_passw
 import 'package:rosheta/features/login/presentation/pages/login_page.dart';
 import 'package:rosheta/features/sign_up/presentation/pages/sign_up_page.dart';
 
+import '../../../../core/helper_clasess/shared_preferences_helper.dart';
+
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
@@ -16,7 +18,12 @@ class StartPage extends StatefulWidget {
   _StartPageState createState() => _StartPageState();
 }
 
+
+
 class _StartPageState extends State<StartPage> {
+
+
+
   List<Map<String, dynamic>> listItem = [
     {
       'title': 'Help Mellions Of People everywhere, everytime.',
@@ -175,43 +182,47 @@ class _StartPageState extends State<StartPage> {
                       SizedBox(
                         height: 45,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '''Forget Password? ''',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Get.to(ForgotPasswordPage());
-                            },
-                            child: Text(
-                              'Click Here',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.purple),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      InkWell(
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: AppColors.green,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        onTap:(){
-                          Get.to(BottomNavPage(0));
-                        },
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Text(
+                      //       '''Forget Password? ''',
+                      //       style: TextStyle(fontSize: 15),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Get.to(ForgotPasswordPage());
+                      //       },
+                      //       child: Text(
+                      //         'Click Here',
+                      //         style: TextStyle(
+                      //             fontSize: 15,
+                      //             fontWeight: FontWeight.w800,
+                      //             color: AppColors.purple),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // InkWell(
+                      //   child: Text(
+                      //     'Skip',
+                      //     style: TextStyle(
+                      //         fontSize: 20,
+                      //         color: AppColors.green,
+                      //         fontWeight: FontWeight.bold
+                      //     ),
+                      //   ),
+                      //   onTap:(){
+                      //     Get.to(BottomNavPage(0));
+                      //   },
+                      // ),
+
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
                     ],
                   ),
                 ),

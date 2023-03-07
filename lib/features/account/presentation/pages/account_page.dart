@@ -6,8 +6,10 @@ import 'package:rosheta/features/account_doctor/presentation/pages/account_docto
 import 'package:rosheta/features/change_password/presentation/pages/change_password_page.dart';
 import 'package:rosheta/features/medical_records/presentation/pages/medical_records_page.dart';
 
+import '../../../start/presentation/pages/start_page.dart';
+
 class AccountPage extends StatelessWidget {
-  const AccountPage({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +187,33 @@ class AccountPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Medical Record',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          Icon(Icons.arrow_right,size: 30,),
+
+                        ],
+                      ),
+                      SizedBox(height: 15,),
+                      Divider(
+                        thickness: 1,
+                      ),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap:  () {
+                    Get.to(StartPage());
+                  },
+                  child: Column(
+                    children: [
+                      SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Log IN',
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold

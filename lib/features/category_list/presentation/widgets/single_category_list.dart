@@ -11,7 +11,6 @@ class SingleCategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Get.to(PharmacyDetailsPage());
         },
         child: Container(
           height: 100,

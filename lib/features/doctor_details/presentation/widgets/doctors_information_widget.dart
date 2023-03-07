@@ -6,7 +6,10 @@ import '../../../../core/my_widgets.dart';
 import '../../../../core/partial_painter.dart';
 
 class DoctorsInformationWidget extends StatelessWidget {
-  const DoctorsInformationWidget({Key? key}) : super(key: key);
+  var data;
+
+
+  DoctorsInformationWidget(this.data);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,11 @@ class DoctorsInformationWidget extends StatelessWidget {
                   width: 130,
                   child: CustomPaint(
                     child: Padding(
-                      padding: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(3.0),
+                      child: Image.network(
+                        data['image'].toString(),
+                        fit: BoxFit.fill,
+                      ),
 
                     ),
                     painter: PartialPainter(
@@ -52,7 +59,7 @@ class DoctorsInformationWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Dr.Hilal Abughoush',style: TextStyle(
+                  Text(data['username'],style: TextStyle(
                       fontSize: 20
                   )),
                   SizedBox(
@@ -61,11 +68,11 @@ class DoctorsInformationWidget extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('IVF and Infertility'),
+                      Text(data['main_specialty_name'].toString()),
                       SizedBox(
                         height: 5,
                       ),
-                      Text('Fees: 25,00',
+                      Text('Fees:' + data['visit_fees'].toString(),
                           style: TextStyle(fontSize: 12)),
                     ],
                   ),
@@ -73,43 +80,47 @@ class DoctorsInformationWidget extends StatelessWidget {
                   SizedBox(
                     height: 5,
                   ),
-                  buildStarsLarg(3)
+                  buildStarsLarg(data['reviews'])
                 ],
               ),
             ),
           ],
         ),
         SizedBox(height: 15,),
-        Divider(
-          thickness: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              FaIcon(
-                FontAwesomeIcons.locationDot,
-                color: Colors.grey.shade700,
-                size: 25,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        data['address'].toString() != 'null' ? Column(
+          children: [
+            Divider(
+              thickness: 1,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
                 children: [
-                  Text('Alshmysani , jaber ben hayyn',
-                      style: TextStyle(fontSize: 12)),
-                  Text('St.bud #65',
-                      style: TextStyle(fontSize: 12)),
+                  FaIcon(
+                    FontAwesomeIcons.locationDot,
+                    color: Colors.grey.shade700,
+                    size: 25,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    width: Get.width - 60,
+                    child: Text(data['address'].toString(),
+
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12)),
+                  ),
                 ],
               ),
-            ],
-          ),
-        ),
-        Divider(
-          thickness: 1,
-        ),
+            ),
+            Divider(
+              thickness: 1,
+            ),
+          ],
+        ): Container(),
+
       ],
     );
   }

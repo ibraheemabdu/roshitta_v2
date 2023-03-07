@@ -2,63 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rosheta/features/home/presentation/bottom_sheet/bottom_sheet_public_type.dart';
+import 'package:rosheta/features/home/presentation/bottom_sheet/bottom_sheet_speciality.dart';
 import '../../../../core/app_consts.dart';
 import '../../../../core/my_widgets.dart';
 import '../../../doctor_list/presentation/pages/doctor_list_page.dart';
-
+import '../../../search_list/presentation/pages/search_list_page.dart';
+import '../bottom_sheet/bottom_sheet_contry.dart';
 
 class SearchFilterWidget extends StatefulWidget {
-  const SearchFilterWidget({Key? key}) : super(key: key);
+  var data;
+
+  SearchFilterWidget(this.data);
 
   @override
   State<SearchFilterWidget> createState() => _SearchFilterWidgetState();
 }
-class Animal {
-  final int id;
-  final String name;
 
-  Animal({
-    required this.id,
-    required this.name,
+
+
+class PublicType {
+  String type_key;
+  String type_name;
+
+  PublicType({
+    required this.type_key,
+    required this.type_name,
   });
 }
+
+class Countries {
+   int id;
+   String country_name;
+   List regions;
+
+  Countries({
+    required this.id,
+    required this.country_name,
+    required this.regions,
+  });
+}
+
+class Specialties {
+   int id;
+   String specialties_name;
+
+  Specialties({
+    required this.id,
+    required this.specialties_name,
+  });
+}
+
 class _SearchFilterWidgetState extends State<SearchFilterWidget> {
+  late PublicType _public_types = PublicType(type_key: '', type_name: '');
 
+  late Countries _countries = Countries(id: -1 , country_name: '', regions:[]);
 
-  static List<Animal> _animals = [
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-    Animal(id: 4, name: "Horse"),
-    Animal(id: 5, name: "Tiger"),
-    Animal(id: 6, name: "Penguin"),
-    Animal(id: 7, name: "Spider"),
-    Animal(id: 8, name: "Snake"),
-    Animal(id: 9, name: "Bear"),
-    Animal(id: 10, name: "Beaver"),
-    Animal(id: 11, name: "Cat"),
-    Animal(id: 12, name: "Fish"),
-    Animal(id: 13, name: "Rabbit"),
-    Animal(id: 14, name: "Mouse"),
-    Animal(id: 15, name: "Dog"),
-    Animal(id: 16, name: "Zebra"),
-    Animal(id: 17, name: "Cow"),
-    Animal(id: 18, name: "Frog"),
-    Animal(id: 19, name: "Blue Jay"),
-    Animal(id: 20, name: "Moose"),
-    Animal(id: 21, name: "Gecko"),
-    Animal(id: 22, name: "Kangaroo"),
-    Animal(id: 23, name: "Shark"),
-    Animal(id: 24, name: "Crocodile"),
-    Animal(id: 25, name: "Owl"),
-    Animal(id: 26, name: "Dragonfly"),
-    Animal(id: 27, name: "Dolphin"),
-  ];
+  late Specialties _specialties = Specialties( id: -1, specialties_name: '' );
 
-  List<Animal> itemSelected = [] ;
-
-
-
+  @override
+  void initState() {
+    super.initState();
+  }
 
 
   @override
@@ -67,13 +72,12 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
       children: [
         Center(
             child: Text(
-              'Find the Nearest Medical Facility',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade700),
-            )
-        ),
+          'Find the Nearest Medical Facility',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade700),
+        )),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 15,
@@ -108,8 +112,7 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                     focusColor: Colors.grey.shade700,
                     fillColor: Colors.grey.shade200,
                     hintText: 'Search by Name',
-                    prefixIcon:
-                    Icon(Icons.search, color: Colors.grey.shade700),
+                    prefixIcon: Icon(Icons.search, color: Colors.grey.shade700),
                     labelStyle: Get.textTheme.headline4,
                     prefixIconColor: Colors.grey.shade700,
                   ),
@@ -130,34 +133,43 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                     )
                   ],
                 ),
-                Padding (
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (ctx){
-                          return MultiSelectDialog<Animal>(
-                            items: _animals.map((e) =>
-                                MultiSelectItem(e, e.name)).toList(),
-                            listType: MultiSelectListType.CHIP,
-                            selectedColor: AppColors.green,
-                            unselectedColor: AppColors.light_green,
-                            selectedItemsTextStyle: TextStyle(
-                                color: Colors.black
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
                             ),
-                            onConfirm: (values) {
-                              setState(() {
-                                itemSelected = values;
-                              }
-                              );
-                            },
-                            initialValue: itemSelected,
-                          );
-                        },
-                      );
+                          ),
+                          builder: (context) {
+                            print(_public_types.type_name.toString());
+                            return Container(
+                              height: Get.height * 0.5,
+                              child: BottomSheetPublicTypeWidget(
+                                  widget.data['public_types'],
+                                  (p0, p1) => {
+
+                                  setState(() {
+
+                                  _public_types.type_key = p0;
+                                  _public_types.type_name = p1;
+
+
+
+                                  print(_public_types.type_key);
+                                  })
+                                      }),
+                            );
+                          });
                     },
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +177,7 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                             Row(
                               children: [
                                 FaIcon(
-                                  FontAwesomeIcons.stethoscope,
+                                  FontAwesomeIcons.hospital,
                                   color: Colors.grey.shade700,
                                 ),
                                 SizedBox(
@@ -174,50 +186,42 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Speciality',
+                                    Text('Public Types',
                                         style: TextStyle(
-                                            fontSize: 14, color: Colors.grey.shade700)),
-                                    Text('Select Speciality',
+                                            fontSize: 14,
+                                            color: Colors.grey.shade700)),
+                                    Text('Select Types',
                                         style: TextStyle(
-                                            fontSize: 12, color: Colors.grey.shade700)
-                                    ),
+                                            fontSize: 12,
+                                            color: Colors.grey.shade700)),
                                   ],
                                 )
                               ],
                             ),
-                            Icon(Icons.keyboard_arrow_down_sharp,
+                            Icon(
+                              Icons.keyboard_arrow_down_sharp,
                               size: 35,
                               color: Colors.grey.shade700,
                             )
                           ],
                         ),
-                        SizedBox(height:  itemSelected.length != 0 ? 15 : 0),
+                        SizedBox(height: 10,),
+                        _public_types.type_name != '' ?
                         Container(
-                          height: itemSelected.length != 0 ? 35 : 0,
-                          child: ListView.builder(
-                            itemCount: itemSelected.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: AppColors.light_green,
-                                        borderRadius: BorderRadius.all(Radius.circular(20))
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(itemSelected[index].name)),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5,)
-                                ],
-                              );
-                            },
-
-                          ),
-                        )
+                            decoration: BoxDecoration(
+                                color: AppColors.light_green,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16),
+                              child: Text(
+                                _public_types.type_name,
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                            )):
+                        Container(),
                       ],
                     ),
                   ),
@@ -225,77 +229,188 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                 Divider(
                   thickness: 1,
                 ),
+                _public_types.type_key ==
+                    'doctors' &&
+                    _public_types.type_key  != '' ?
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (context) {
+                                return Container(
+                                  height: Get.height * 0.8,
+                                  child: BottomSheetSpecialityWidget(
+                                      widget.data['all_specialties'], (p0,p1) => {
+                                    setState(() {
+                                      _specialties.id = p0 ;
+                                      _specialties.specialties_name = p1;
+                                    })
+
+
+                                  }),
+                                );
+                              });
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.stethoscope,
+                                      color: Colors.grey.shade700,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Speciality',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey.shade700)),
+                                        Text('Select Speciality',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey.shade700)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  size: 35,
+                                  color: Colors.grey.shade700,
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 10,),
+                            _specialties.id != -1 ?
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.light_green,
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 16),
+                                  child: Text(
+                                    _specialties.specialties_name,
+                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )):
+                            Container(),
+
+
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
+                  ],
+                ):
+                Container(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.globe,
-                            color: Colors.grey.shade700,
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Country',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey.shade700)),
-                              Text('Select Country',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey.shade700)),
-                            ],
-                          )
-                        ],
-                      ),
+                          builder: (context) {
+                            return Container(
+                              height: Get.height * 0.5,
+                              child: BottomSheetContryWidget(
+                                  widget.data['countries'], (p0,p1) => {
+                                setState(() {
+                                  _countries.id = p0 ;
+                                  _countries.country_name = p1;
+                                })
+                              }),
+                            );
+                          });
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.globe,
+                                  color: Colors.grey.shade700,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Country',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey.shade700)),
+                                    Text('Select Country',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade700)),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down_sharp,
+                              size: 35,
+                              color: Colors.grey.shade700,
+                            )
+                          ],
+                        ),
 
-                      Icon(Icons.keyboard_arrow_down_sharp,
-                        size: 35,
-                        color: Colors.grey.shade700,
-                      )
-                    ],
-                  ),
-                ),
-                Divider(
-                  thickness: 1,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.locationDot,
-                            color: Colors.grey.shade700,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Region',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey.shade700)),
-                              Text('Select Region',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey.shade700)),
-                            ],
-                          )
-                        ],
-                      ),
-
-                      Icon(Icons.keyboard_arrow_down_sharp,
-                        size: 35,
-                        color: Colors.grey.shade700,
-                      )
-                    ],
+                        SizedBox(height: 10,),
+                        _countries.id != -1 ?
+                        Container(
+                            decoration: BoxDecoration(
+                                color: AppColors.light_green,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16),
+                              child: Text(
+                                _countries.country_name,
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                            )):
+                        Container(),
+                      ],
+                    ),
                   ),
                 ),
                 Divider(
@@ -306,12 +421,12 @@ class _SearchFilterWidgetState extends State<SearchFilterWidget> {
                 ),
                 InkWell(
                     onTap: () {
-                      Get.to(DoctorList());
+                      Get.to(SearchList(_public_types,_countries,_specialties));
                     },
                     child: buildButton('Book A Visit', false)),
                 SizedBox(
                   height: 15,
-                )
+                ),
               ],
             ),
           ),
